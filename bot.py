@@ -22,7 +22,7 @@ async def reply(cls,msg):
 @bot.on_message(filters.private &filters.command("help"))
 async def reply(cls,msg):
     await msg.reply("for help dm @nafiyad1")
-@bot.on_message(filters.command("download"),filters.text)
+@bot.on_message(filters.command("download"))
 async def answer(bot,msg):
     x= await bot.ask(msg.from_user.id,"**send me the link of the youtube video **")
     
