@@ -33,7 +33,7 @@ async def answer(bot,msg):
     link = "https://www.youtube.com/watch?v=UNZqm3dxd2w"
     
     
-    await bot.send_message(msg.from_user.id,"downloading the video please wait")
+    await bot.send_message(msg.from_user.id,"downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
     
     
     
