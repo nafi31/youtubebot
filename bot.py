@@ -51,7 +51,7 @@ async def answer(bot,msg):
         
         vid.close()
         await bot.send_audio(msg.from_user.id,audio=mp3,title=vd.title,
-            caption=str(vd.title),duration=int(vd.length))
+            caption=str(vd.title),duration=int(vd.length),performer=vd.author)
     except RegexMatchError:
         await bot.send_message(msg.from_user.id,'unkonwn link')
 
