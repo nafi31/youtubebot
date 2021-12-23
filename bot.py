@@ -41,8 +41,10 @@ async def answer(bot,query,disable_web_page_preview=True):
         
         vid = VideoFileClip(video.download())
         print(os.listdir())
-        mp3 = vid.audio.write_audiofile(vd.title+".mp3")
-        mp3.close()
+        mp3 = vd.title+".mp3"
+        file = vid.audio.write_audiofile(mp3)
+
+        
         vid.close()
         await bot.send_audio(query.from_user.id,audio=mp3,title=vd.title,
             caption=str(vd.title),duration=int(vd.length))
