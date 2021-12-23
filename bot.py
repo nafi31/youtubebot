@@ -27,7 +27,7 @@ async def answer(bot,msg):
     x= await bot.ask(msg.from_user.id,"**send me the link of the youtube video **")
     
     
-    time.sleep(2)
+    
     
     
     link = "https://www.youtube.com/watch?v=UNZqm3dxd2w"
