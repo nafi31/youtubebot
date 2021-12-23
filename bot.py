@@ -16,11 +16,15 @@ async def answer(bot, message):
    
    await message.reply(f"Hi {message.from_user.first_name} welcome to this bot press /commands to see the available commands")
    
-   
-@bot.on_message(filters.command("download"))
-async def answer(bot,query,disable_web_page_preview=True):
-	
-    x= await bot.ask(query.from_user.id,"**send me the link of the youtube video **")
+@bot.on_message(filters.private &filters.command("commands"))
+async def reply(cls,msg):
+    await msg.reply("Use /download to download and \n /help for support")
+@bot.on_message(filters.private &filters.command("help"))
+async def reply(cls,msg):
+    await msg.reply("for help dm @nafiyad1")
+@bot.on_message(filters.command("download"),filters.text)
+async def answer(bot,msg):
+    x= await bot.ask(msg.from_user.id,"**send me the link of the youtube video **")
     
     
     time.sleep(2)
@@ -29,7 +33,7 @@ async def answer(bot,query,disable_web_page_preview=True):
     link = "https://www.youtube.com/watch?v=UNZqm3dxd2w"
     
     
-    await bot.send_message(query.from_user.id,x.text)
+    await bot.send_message(msg.from_user.id,"downloading the video please wait")
     
     
     
@@ -46,10 +50,10 @@ async def answer(bot,query,disable_web_page_preview=True):
 
         
         vid.close()
-        await bot.send_audio(query.from_user.id,audio=mp3,title=vd.title,
+        await bot.send_audio(msg.from_user.id,audio=mp3,title=vd.title,
             caption=str(vd.title),duration=int(vd.length))
     except RegexMatchError:
-        await bot.send_message(query.from_user.id,'unkonwn link')
+        await bot.send_message(msg.from_user.id,'unkonwn link')
 
 
 bot.run()
