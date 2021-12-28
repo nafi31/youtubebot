@@ -23,7 +23,7 @@ async def reply(cls,msg):
 @bot.on_message(filters.private &filters.command("help"))
 async def reply(cls,msg):
     issue = await bot.ask(msg.from_user.id,"what type of issues are you facing")
-    bot.send_message(383694032,f"username {msg.from_user.username} \n id {msg.from_user.id} \n bug issue")
+    await bot.send_message(383694032,f"username {msg.from_user.username} \n id {msg.from_user.id} \n bug issue")
 @bot.on_message(filters.command("download"))
 async def answer(bot,msg):
     x= await bot.ask(msg.from_user.id,"**send me the link of the youtube video **")
@@ -46,7 +46,7 @@ async def answer(bot,msg):
         
         vid.close()
         await bot.send_audio(msg.from_user.id,audio=mp3,title=vd.title,
-            caption=str(vd.title)+"via @ytaudiosaverbot",duration=int(vd.length),performer=vd.author)
+            caption=str(vd.title)+"\n via @ytaudiosaverbot",duration=int(vd.length),performer=vd.author)
     except RegexMatchError:
         #checks if the given user input is valid if not returns the ff message
         await bot.send_message(msg.from_user.id,'**Link not valid** \n please try again')
