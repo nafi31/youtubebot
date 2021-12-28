@@ -22,8 +22,8 @@ async def reply(cls,msg):
     await msg.reply("Use /download to download and \n /help to report bugs")
 @bot.on_message(filters.private &filters.command("help"))
 async def reply(cls,msg):
-    issue = await bot.ask(msg.from_user.id,"what type of issues are you facing")
-    await bot.send_message(383694032,f"username {msg.from_user.username} \n id {msg.from_user.id} \n bug issue")
+    issue = await bot.ask(msg.from_user.id,"what type of issues are you facing please elaborate in a text we wont reply but we will release the patch A.S.A.P")
+    await bot.send_message(383694032,f"username {msg.from_user.username} \n id {msg.from_user.id} \n bug issue {msg.text}")
 @bot.on_message(filters.command("download"))
 async def answer(bot,msg):
     x= await bot.ask(msg.from_user.id,"**send me the link of the youtube video **")
