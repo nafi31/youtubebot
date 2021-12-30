@@ -60,7 +60,7 @@ async def reply(bot, msg):
         with open(thmb.title+".jpg", "wb") as img:
             img.write(re.content)
             img.close()
-        await bot.send_message(msg.from_user.id, "downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
+        await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
         try:
             vd = YouTube(msg.text)
@@ -92,7 +92,7 @@ async def reply(bot, msg):
 async def answer(cls, msg):
     x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
     # asks user for input
-    await bot.send_message(msg.from_user.id, "downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
+    await bot.send_message(msg.from_user.id, "downloading the video please wait, might take 1-2 mins because of shortage of server funds, dm  @nafiyad1 to save the bot")
     thmb = YouTube(msg.text)
     re = requests.get(thmb.thumbnail_url)
     with open(thmb.title+".jpg", "wb") as img:
