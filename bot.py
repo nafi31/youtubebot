@@ -47,7 +47,7 @@ async def search(cls, msg):
         if count <= 5:
 
             res = res + \
-                f"{i.title} \n [copy] >`/{i.video_id}` \n\n "
+                f"{i.title} \n [copy] > `/{i.video_id}` \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
