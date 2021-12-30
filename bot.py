@@ -28,7 +28,6 @@ async def reply(cls, msg):
 @bot.on_message(filters.private & filters.command("help"))
 async def reply(cls, msg):
     issue = await bot.ask(msg.from_user.id, "what type of issues are you facing please elaborate in a text we wont reply but we will release the patch A.S.A.P")
-    await issue.forward(383694032)
 
     await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
     await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ")
