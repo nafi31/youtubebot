@@ -47,7 +47,7 @@ async def search(cls, msg):
         if count <= 5:
 
             res = res + \
-                f"{i.title} \n [copy] > `/{i.video_id}` \n\n "
+                f"{i.title} \n [copy] >`/{i.video_id}` \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
@@ -78,6 +78,7 @@ async def reply(bot, msg):
             # writting the mp3 file
 
             vid.close()
+            await bot.send_chat_action(msg.from_user.id,"upload_audio")
             await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                                  caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
         except RegexMatchError:
@@ -113,6 +114,7 @@ async def answer(cls, msg):
         # writting the mp3 file
 
         vid.close()
+        await bot.send_chat_action(msg.from_user.id,"upload_audio")
         await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                              caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
     except RegexMatchError:
