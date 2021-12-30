@@ -7,6 +7,7 @@ from pytube.exceptions import RegexMatchError
 import os
 import requests
 import time
+import base64
 from moviepy.editor import *
 bot = Client("start  ",
              bot_token="5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU",
@@ -43,14 +44,15 @@ async def search(cls, msg):
         count = count + 1
         if count <= 5:
 
-            res = res + f"{i.title} \n /{i.video_id} \n\n "
+            res = res + \
+                f"{i.title} \n /yt{base64.b64encode(i.video_id)}) \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
 
-@bot.on_message(filters.private & filters.regex("/.........."))
+@bot.on_message(filters.private & filters.regex("/yt.........."))
 async def reply(bot, msg):
-    thmb = YouTube(msg.text)
+    thmb = YouTube(base64.b64decode(msg.text))
     re = requests.get(thmb.thumbnail_url)
     with open(thmb.title+".jpg", "wb") as img:
         img.write(re.content)
@@ -58,7 +60,7 @@ async def reply(bot, msg):
     await bot.send_message(msg.from_user.id, "downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
 
     try:
-        vd = YouTube(msg.text)
+        vd = YouTube(base64.b64decode(msg.text))
         # opens the link if its valid
         video = vd.streams.filter(
             progressive=True, file_extension='mp4').desc().first()
