@@ -1,5 +1,7 @@
+from typing_extensions import final
 from pyrogram import Client, filters
 from pyrogram.types import ReplyKeyboardMarkup
+from pyrogram.types.messages_and_media import message
 from pyromod import listen
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
@@ -36,7 +38,7 @@ async def reply(cls, msg):
 
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):
-    x = await bot.ask(msg.from_user.id, "**send me the name of the video and click the video id or link from the result **")
+    x = await bot.ask(msg.from_user.id, "**send me the name of the video and copy the video id from the result and send it to me**")
     vd = Search(x.text)
     res = ""
     count = 0
@@ -45,41 +47,44 @@ async def search(cls, msg):
         if count <= 5:
 
             res = res + \
-                f"{i.title} \n /yt{base64.b64encode(i.video_id)}) \n\n "
+                f"{i.title} \n [copy] -->`/{i.video_id}` \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
 
-@bot.on_message(filters.private & filters.regex("/yt.........."))
+@bot.on_message(filters.private & filters.regex("..........."))
 async def reply(bot, msg):
-    thmb = YouTube(base64.b64decode(msg.text))
-    re = requests.get(thmb.thumbnail_url)
-    with open(thmb.title+".jpg", "wb") as img:
-        img.write(re.content)
-        img.close()
-    await bot.send_message(msg.from_user.id, "downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
-
     try:
-        vd = YouTube(base64.b64decode(msg.text))
-        # opens the link if its valid
-        video = vd.streams.filter(
-            progressive=True, file_extension='mp4').desc().first()
-        # filtering the highest quality of the video available
+        thmb = YouTube(msg.text)
+        re = requests.get(thmb.thumbnail_url)
+        with open(thmb.title+".jpg", "wb") as img:
+            img.write(re.content)
+            img.close()
+        await bot.send_message(msg.from_user.id, "downloading the video please wait might take 1-2 mins because of shortage of server funds dm to @nafiyad1 to save the bot")
 
-        vid = VideoFileClip(video.download())
-        # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
+        try:
+            vd = YouTube(msg.text)
+            # opens the link if its valid
+            video = vd.streams.filter(
+                progressive=True, file_extension='mp4').desc().first()
+            # filtering the highest quality of the video available
 
-        mp3 = vd.title+".mp3"
-        # sets the audio file name as the youtube videos title
-        file = vid.audio.write_audiofile(mp3)
-        # writting the mp3 file
+            vid = VideoFileClip(video.download())
+            # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
 
-        vid.close()
-        await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
-                             caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
+            mp3 = vd.title+".mp3"
+            # sets the audio file name as the youtube videos title
+            file = vid.audio.write_audiofile(mp3)
+            # writting the mp3 file
+
+            vid.close()
+            await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
+                                 caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
+        except RegexMatchError:
+            # checks if the given user input is valid if not returns the ff message
+            await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
     except RegexMatchError:
-        # checks if the given user input is valid if not returns the ff message
-        await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
+        pass
 
 
 @bot.on_message(filters.command("download"))
