@@ -1,4 +1,4 @@
-from typing_extensions import final
+
 from pyrogram import Client, filters
 from pyrogram.types import ReplyKeyboardMarkup
 from pyrogram.types.messages_and_media import message
