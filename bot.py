@@ -56,10 +56,19 @@ async def search(cls, msg):
 async def reply(bot, msg):
     try:
         thmb = YouTube(msg.text)
-        re = requests.get(thmb.thumbnail_url)
-        with open(thmb.title+".jpg", "wb") as img:
+        name = thmb.title
+        if not os.path.isfile(name+".jpg"):
+
+            t = str.maketrans("/\\", "  ")
+            name = name.translate(t)
+
+            re = requests.get(thmb.thumbnail_url)
+            img = open(name+".jpg", "wb")
             img.write(re.content)
             img.close()
+        else:
+            pass
+
         await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
         try:
@@ -72,15 +81,15 @@ async def reply(bot, msg):
             vid = VideoFileClip(video.download())
             # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
 
-            mp3 = vd.title+".mp3"
+            mp3 = name+".mp3"
             # sets the audio file name as the youtube videos title
             file = vid.audio.write_audiofile(mp3)
             # writting the mp3 file
 
             vid.close()
-            await bot.send_chat_action(msg.from_user.id,"upload_audio")
-            await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
-                                 caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
+            await bot.send_chat_action(msg.from_user.id, "upload_audio")
+            await bot.send_audio(msg.from_user.id, audio=mp3, title=name,
+                                 caption=str(name)+"\n via @ytaudiosaverbot", thumb=name+".jpg", duration=int(vd.length), performer=vd.author)
         except RegexMatchError:
             # checks if the given user input is valid if not returns the ff message
             await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
@@ -114,7 +123,7 @@ async def answer(cls, msg):
         # writting the mp3 file
 
         vid.close()
-        await bot.send_chat_action(msg.from_user.id,"upload_audio")
+        await bot.send_chat_action(msg.from_user.id, "upload_audio")
         await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                              caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
     except RegexMatchError:
