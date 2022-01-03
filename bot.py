@@ -40,7 +40,9 @@ async def reply(cls, msg):
         await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
         await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ")
     else:
-        await bot.send_message(msg.from_user.id, "report cancelled")
+        await bot.send_message(msg.from_user.id, "report cancelled", reply_markup=ReplyKeyboardMarkup([
+            [""],
+        ]))
 
 
 @bot.on_message(filters.private & filters.command("search"))
