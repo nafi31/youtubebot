@@ -4,3 +4,4 @@ pyromod
 pytube
 moviepy
 psycopg[binary]
+numerize

@@ -1,7 +1,7 @@
 
 from pyrogram import Client, filters
 from pyrogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
-
+from numerize import numerize
 from pyromod import listen
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
@@ -78,7 +78,7 @@ async def reply(cls, msg):
 
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):
-    x = await bot.ask(msg.from_user.id, "**send me the name of the video and copy the video id from the result and send it to me**")
+    x = await bot.ask(msg.from_user.id, "**send me the name of the video and press the link that comes with it**")
     vd = Search(x.text)
     res = ""
     count = 0
@@ -87,7 +87,7 @@ async def search(cls, msg):
         if count <= 5:
 
             res = res + \
-                f"{i.title} \n\n/yt_{lock(i.video_id)} \n\n "
+                f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
