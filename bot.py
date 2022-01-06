@@ -32,7 +32,14 @@ def unlock(encoded):
     orignal_encoded = encoded + ('=' * padding)
     decoded = urlsafe_b64decode(orignal_encoded.encode()).decode("ascii")
     return decoded
+#with bot:
+    #for i in getallusers():
+        #print(i)
+      #  order, ids = i
+      #  print(ids)
+      #  if ids != None:
 
+       #     bot.send_message(ids,"Thanks for using @ytaudiosaverbot dont forget to share me")
 
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
