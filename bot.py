@@ -44,6 +44,13 @@ async def reply(cls, msg):
     await msg.reply("Use \n /download to download audio with a link \n /search to search a video with a name  \n /help to report bugs")
 
 
+# @bot.on_message(filters.user("@nafiyad1"))
+# async def reply(cls, msg):
+    # if msg.reply_to_message:
+ #   print(msg)
+ #   await bot.send_message(msg.reply_to_message.chat.id, msg.text)
+
+
 @bot.on_message(filters.private & filters.command("help"))
 async def reply(cls, msg):
     issue = await bot.ask(msg.from_user.id, "what type of issues are you facing please elaborate in a text we wont reply but we will release the patch A.S.A.P", reply_markup=ReplyKeyboardMarkup([
@@ -52,7 +59,7 @@ async def reply(cls, msg):
     ], resize_keyboard=True))
     if issue.text != "cancel" and issue.text != "/start" and issue.text != "/help" and issue.text != "/download" and issue.text != "/search":
         print("y")
-        await issue.text.forward(383694032)
+        await issue.forward(383694032)
         print("z")
         await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
 
