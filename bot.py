@@ -1,32 +1,47 @@
 
 from pyrogram import Client, filters
-from pyrogram.types import ReplyKeyboardMarkup
-from pyrogram.types.bots_and_keyboards import reply_keyboard_markup
-from pyrogram.types.messages_and_media import message
+from pyrogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
+
 from pyromod import listen
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
-
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 import os
 import requests
 import time
 import base64
 from moviepy.editor import *
-bot = Client("start  ",
+# 5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU
+bot = Client("start ",
              bot_token="5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU",
              api_hash="ce82c02582127129de5bf0ff2580352e",
              api_id="1589810")
 
 
+def lock(name):
+    name = urlsafe_b64encode(name.encode()).decode("ascii")
+    stripped = name.strip("=")
+    return stripped
+
+
+def unlock(encoded):
+    stripped = encoded.strip("=")
+
+    padding = -len(stripped) % 4
+    orignal_encoded = encoded + ('=' * padding)
+    decoded = urlsafe_b64decode(orignal_encoded.encode()).decode("ascii")
+    return decoded
+
+
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
 
-    await message.reply(f"Hi {message.from_user.first_name} welcome to this bot press \n /commands to see the available commands")
+    await message.reply(f"Hi {message.from_user.first_name} welcome to YTA bot press \n /commands to see the available commands")
 
 
 @bot.on_message(filters.private & filters.command("commands"))
 async def reply(cls, msg):
-    await msg.reply("Use /download to download audio with a link \n /search to search a video with a name  \n /help to report bugs")
+    await msg.reply("Use \n /download to download audio with a link \n /search to search a video with a name  \n /help to report bugs")
 
 
 @bot.on_message(filters.private & filters.command("help"))
@@ -38,9 +53,9 @@ async def reply(cls, msg):
     if not issue.text == "cancel":
 
         await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
-        await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ")
+        await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ", reply_markup=ReplyKeyboardRemove())
     else:
-        await bot.send_message(msg.from_user.id, "report cancelled")
+        await bot.send_message(msg.from_user.id, "report cancelled", reply_markup=ReplyKeyboardRemove())
 
 
 @bot.on_message(filters.private & filters.command("search"))
@@ -54,15 +69,16 @@ async def search(cls, msg):
         if count <= 5:
 
             res = res + \
-                f"{i.title} \n [copy] >`/{i.video_id}` \n\n "
+                f"{i.title} \n\n/yt_{lock(i.video_id)} \n\n "
 
     await bot.send_message(msg.from_user.id, res)
 
 
-@bot.on_message(filters.private & filters.regex("..........."))
+@bot.on_message(filters.private & filters.regex("/yt_.*"))
 async def reply(bot, msg):
     try:
-        thmb = YouTube(msg.text)
+        print(unlock(msg.text.split("_")[1]))
+        thmb = YouTube("/"+unlock(msg.text.split("_")[1]))
         name = thmb.title
         if not os.path.isfile(name+".jpg"):
 
@@ -79,7 +95,7 @@ async def reply(bot, msg):
         await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
         try:
-            vd = YouTube(msg.text)
+            vd = YouTube(unlock(msg.text.split("_")[1]))
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').desc().first()
