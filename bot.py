@@ -11,7 +11,7 @@ import requests
 import time
 import base64
 from moviepy.editor import *
-# 5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU
+
 bot = Client("start ",
              bot_token="5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU",
              api_hash="ce82c02582127129de5bf0ff2580352e",
