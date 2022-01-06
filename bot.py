@@ -11,7 +11,7 @@ import requests
 import time
 import base64
 from moviepy.editor import *
-from db import getusers, add_user
+from db import getallusers, getusers, add_user
 
 bot = Client("start ",
              bot_token="5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU",
@@ -74,7 +74,9 @@ async def reply(cls, msg):
         await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ", reply_markup=ReplyKeyboardRemove())
     else:
         await bot.send_message(msg.from_user.id, "report cancelled", reply_markup=ReplyKeyboardRemove())
-
+@bot.on_message(filters.command("totalusers"))
+async def reply(cls,msg):
+    await bot.send_message(msg.from_user.id,len(getallusers()))
 
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):

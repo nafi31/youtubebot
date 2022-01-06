@@ -11,7 +11,9 @@ def create_table():
  ''')
 
 
-
+def getallusers():
+    cur.execute("select * from userdata")
+    return cur.fetchall()
 def getusers(user_ids):
     cur.execute("select * from userdata where user_id=(%s) ",(user_ids,))
     return cur.fetchall()
