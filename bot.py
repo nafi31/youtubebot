@@ -40,6 +40,14 @@ def unlock(encoded):
       #  if ids != None:
 
        #     bot.send_message(ids,"Thanks for using @ytaudiosaverbot dont forget to share me")
+@bot.on_message(filters.private  & filters.user(383694032) & filters.command("broadcast"))
+async def send(cls,msg):
+    brd = await bot.ask(msg.from_user.id,"What do you want to send")
+    for i in getallusers():
+        order , ids = i
+        if ids != None:
+
+            await bot.send_message(ids,brd.text)
 
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
