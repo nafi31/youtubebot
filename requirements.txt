@@ -3,3 +3,4 @@ Tgcrypto
 pyromod
 pytube
 moviepy
+psycopg[binary]

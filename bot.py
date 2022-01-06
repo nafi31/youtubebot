@@ -11,6 +11,7 @@ import requests
 import time
 import base64
 from moviepy.editor import *
+from db import getusers, add_user
 
 bot = Client("start ",
              bot_token="5022200001:AAEMupSxnxJ5UjViS1Vyvud87zVUQVCGgUU",
@@ -35,9 +36,16 @@ def unlock(encoded):
 
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
+    #print(getusers(message.from_user.id))
+    if not getusers(message.from_user.id):
+        add_user(message.from_user.id)
+        await message.reply(f"Hi {message.from_user.first_name} welcome to YTA bot press \n /commands to see the available commands")
 
-    await message.reply(f"Hi {message.from_user.first_name} welcome to YTA bot press \n /commands to see the available commands")
-
+    else:
+        #for i in getusers(message.from_user.id):
+            #ord , ids = i
+           # print(ids)
+        await message.reply(f"Hi {message.from_user.first_name} welcome to YTA bot press \n /commands to see the available commands")
 
 @bot.on_message(filters.private & filters.command("commands"))
 async def reply(cls, msg):
