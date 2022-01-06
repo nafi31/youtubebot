@@ -44,13 +44,6 @@ async def reply(cls, msg):
     await msg.reply("Use \n /download to download audio with a link \n /search to search a video with a name  \n /help to report bugs")
 
 
-@bot.on_message(filters.user(383694032))
-async def reply(cls, msg):
-    if msg.reply_to_message:
-        await bot.send_message(msg.reply_to_message.from_user.id, msg.text)
-        await bot.send_message(383694032, "sent text to "+msg.reply_to_message.from_user.id)
-
-
 @bot.on_message(filters.private & filters.command("help"))
 async def reply(cls, msg):
     issue = await bot.ask(msg.from_user.id, "what type of issues are you facing please elaborate in a text we wont reply but we will release the patch A.S.A.P", reply_markup=ReplyKeyboardMarkup([
