@@ -77,12 +77,12 @@ async def search(cls, msg):
 @bot.on_message(filters.private & filters.regex("/yt_.*"))
 async def reply(bot, msg):
     try:
-        print(unlock(msg.text.split("_")[1]))
+        print("https://youtu.be/"+unlock(msg.text.split("_")[1]))
         thmb = YouTube("/"+unlock(msg.text.split("_")[1]))
         name = thmb.title
         if not os.path.isfile(name+".jpg"):
 
-            t = str.maketrans("/\\", "  ")
+            t = str.maketrans('/\\""', "    ")
             name = name.translate(t)
 
             re = requests.get(thmb.thumbnail_url)
@@ -95,7 +95,7 @@ async def reply(bot, msg):
         await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
         try:
-            vd = YouTube(unlock(msg.text.split("_")[1]))
+            vd = YouTube("https://youtu.be/"+unlock(msg.text.split("_")[1]))
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').desc().first()
