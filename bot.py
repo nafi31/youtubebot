@@ -64,7 +64,7 @@ async def answer(bot, message):
 
 @bot.on_message(filters.private & filters.command("commands"))
 async def reply(cls, msg):
-    await msg.reply("Use \n /download to download audio with a link \n /search to search a video with a name  \n /help to report bugs")
+    await msg.reply("Use \n /download to download audio with a link \n /search to search and download audios  \n /help to report bugs")
 
 
 # @bot.on_message(filters.user("@nafiyad1"))
