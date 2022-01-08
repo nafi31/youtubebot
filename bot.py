@@ -117,6 +117,10 @@ async def search(cls, msg):
                     InlineKeyboardButton(  # Generates a callback query when pressed
                         "next page",
                         callback_data="next-page"
+                    ),
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "How to download❔",
+                        callback_data="how-to"
                     )
                     
                 ]
@@ -177,6 +181,10 @@ async def reply(query,msg):
                     InlineKeyboardButton(  # Generates a callback query when pressed
                         "first page",
                         callback_data="first-page"
+                    ),
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "How to download❔",
+                        callback_data="how-to"
                     )
                     
                 ]
@@ -190,11 +198,18 @@ async def reply(query,msg):
                     InlineKeyboardButton(  # Generates a callback query when pressed
                         "next page",
                         callback_data="next-page"
+                    ),
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "How to download❔",
+                        callback_data="how-to"
                     )
                     
                 ]
             ]
         ))
+@bot.on_callback_query(filters.regex("how-to"))
+async def reply(query,msg):
+    await msg.answer("click on the video link you want to download its that simple",show_alert=True)
 @bot.on_message(filters.command("download"))
 async def answer(cls, msg):
     x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
