@@ -81,9 +81,9 @@ async def reply(cls, msg):
 
     ], resize_keyboard=True))
     if issue.text != "cancel" and issue.text != "/start" and issue.text != "/help" and issue.text != "/download" and issue.text != "/search":
-        print("y")
+        #print("y")
         await issue.forward(383694032)
-        print("z")
+        #print("z")
         await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
 
         await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ", reply_markup=ReplyKeyboardRemove())
@@ -101,7 +101,7 @@ async def search(cls, msg):
     count = 0
     for i in vd.results:
         count = count + 1
-        if count <= 5:
+        if count <= 3:
 
             res = res + \
                 f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
@@ -112,7 +112,7 @@ async def search(cls, msg):
 @bot.on_message(filters.private & filters.regex("/yt_.*"))
 async def reply(bot, msg):
     try:
-        print("https://youtu.be/"+unlock(msg.text.split("_")[1]))
+        #print("https://youtu.be/"+unlock(msg.text.split("_")[1]))
         thmb = YouTube("/"+unlock(msg.text.split("_")[1]))
         name = thmb.title
         if not os.path.isfile(name+".jpg"):
