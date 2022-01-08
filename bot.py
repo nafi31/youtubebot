@@ -2,14 +2,14 @@
 from pyrogram import Client, filters
 from pyrogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from numerize import numerize
+from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
+from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
 from pyromod import listen
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 import os
 import requests
-import time
-import base64
 from moviepy.editor import *
 from db import getallusers, getusers, add_user
 
@@ -95,9 +95,11 @@ async def reply(cls,msg):
 
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):
+    global next_res,res
     x = await bot.ask(msg.from_user.id, "**send me the name of the video and press the link that comes with it**")
     vd = Search(x.text)
     res = ""
+    next_res = ""
     count = 0
     for i in vd.results:
         count = count + 1
@@ -105,8 +107,21 @@ async def search(cls, msg):
 
             res = res + \
                 f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+        elif count >=3 and count <= 6: 
+            next_res = next_res +f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
 
-    await bot.send_message(msg.from_user.id, res)
+
+    await bot.send_message(msg.from_user.id, res,reply_markup=InlineKeyboardMarkup(
+            [
+                [  # First row
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "next page",
+                        callback_data="next-page"
+                    )
+                    
+                ]
+            ]
+        ))
 
 
 @bot.on_message(filters.private & filters.regex("/yt_.*"))
@@ -154,39 +169,67 @@ async def reply(bot, msg):
     except RegexMatchError:
         pass
 
-
+@bot.on_callback_query(filters.regex("next-page"))
+async def reply(query,msg):
+    await msg.edit_message_text(next_res,reply_markup=InlineKeyboardMarkup(
+            [
+                [  # First row
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "first page",
+                        callback_data="first-page"
+                    )
+                    
+                ]
+            ]
+        ))
+@bot.on_callback_query(filters.regex("first-page"))
+async def reply(query,msg):
+    await msg.edit_message_text(res,reply_markup=InlineKeyboardMarkup(
+            [
+                [  # First row
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "next page",
+                        callback_data="next-page"
+                    )
+                    
+                ]
+            ]
+        ))
 @bot.on_message(filters.command("download"))
 async def answer(cls, msg):
     x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
     # asks user for input
     await bot.send_message(msg.from_user.id, "downloading the video please wait, might take 1-2 mins because of shortage of server funds, dm  @nafiyad1 to save the bot")
-    thmb = YouTube(msg.text)
-    re = requests.get(thmb.thumbnail_url)
-    with open(thmb.title+".jpg", "wb") as img:
-        img.write(re.content)
-        img.close()
     try:
-        vd = YouTube(x.text)
-        # opens the link if its valid
-        video = vd.streams.filter(
-            progressive=True, file_extension='mp4').desc().first()
-        # filtering the highest quality of the video available
+        thmb = YouTube(msg.text)
+        re = requests.get(thmb.thumbnail_url)
+        with open(thmb.title+".jpg", "wb") as img:
+            img.write(re.content)
+            img.close()
+        try:
+            vd = YouTube(x.text)
+            # opens the link if its valid
+            video = vd.streams.filter(
+             progressive=True, file_extension='mp4').desc().first()
+         # filtering the highest quality of the video available
 
-        vid = VideoFileClip(video.download())
+            vid = VideoFileClip(video.download())
         # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
 
-        mp3 = vd.title+".mp3"
+            mp3 = vd.title+".mp3"
         # sets the audio file name as the youtube videos title
-        file = vid.audio.write_audiofile(mp3)
+            file = vid.audio.write_audiofile(mp3)
         # writting the mp3 file
 
-        vid.close()
-        await bot.send_chat_action(msg.from_user.id, "upload_audio")
-        await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
+            vid.close()
+            await bot.send_chat_action(msg.from_user.id, "upload_audio")
+            await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                              caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
-    except RegexMatchError:
+        except RegexMatchError:
         # checks if the given user input is valid if not returns the ff message
+           pass
+    except RegexMatchError:
         await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
-
+    
 
 bot.run()
