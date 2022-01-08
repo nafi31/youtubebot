@@ -92,6 +92,12 @@ async def reply(cls, msg):
 @bot.on_message(filters.command("totalusers"))
 async def reply(cls,msg):
     await bot.send_message(msg.from_user.id,len(getallusers()))
+    users = ""
+    for i in getallusers():
+        order , user_ids = i
+        get_usr = await bot.get_users(user_ids)
+        users = users + f"{get_usr.first_name} \n" 
+    await bot.send_message(msg.from_user.id,users)
 
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):
@@ -134,10 +140,9 @@ async def reply(bot, msg):
         #print("https://youtu.be/"+unlock(msg.text.split("_")[1]))
         thmb = YouTube("/"+unlock(msg.text.split("_")[1]))
         name = thmb.title
+        t = str.maketrans('/\\""', "    ")
+        name = name.translate(t)
         if not os.path.isfile(name+".jpg"):
-
-            t = str.maketrans('/\\""', "    ")
-            name = name.translate(t)
 
             re = requests.get(thmb.thumbnail_url)
             img = open(name+".jpg", "wb")
@@ -152,7 +157,7 @@ async def reply(bot, msg):
             vd = YouTube("https://youtu.be/"+unlock(msg.text.split("_")[1]))
             # opens the link if its valid
             video = vd.streams.filter(
-                progressive=True, file_extension='mp4').desc().first()
+                progressive=True, file_extension='mp4').order_by('resolution').desc().first()
             # filtering the highest quality of the video available
 
             vid = VideoFileClip(video.download())
@@ -210,6 +215,9 @@ async def reply(query,msg):
 @bot.on_callback_query(filters.regex("how-to"))
 async def reply(query,msg):
     await msg.answer("click on the video link you want to download its that simple",show_alert=True)
+
+
+    
 @bot.on_message(filters.command("download"))
 async def answer(cls, msg):
     x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
@@ -225,7 +233,7 @@ async def answer(cls, msg):
             vd = YouTube(x.text)
             # opens the link if its valid
             video = vd.streams.filter(
-             progressive=True, file_extension='mp4').desc().first()
+             progressive=True, file_extension='mp4').order_by('resolution').desc().first()
          # filtering the highest quality of the video available
 
             vid = VideoFileClip(video.download())
