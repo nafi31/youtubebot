@@ -224,7 +224,7 @@ async def answer(cls, msg):
     # asks user for input
     await bot.send_message(msg.from_user.id, "downloading the video please wait, might take 1-2 mins because of shortage of server funds, dm  @nafiyad1 to save the bot")
     try:
-        thmb = YouTube(msg.text)
+        thmb = YouTube(x.text)
         re = requests.get(thmb.thumbnail_url)
         with open(thmb.title+".jpg", "wb") as img:
             img.write(re.content)
