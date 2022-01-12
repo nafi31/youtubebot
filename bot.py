@@ -1,14 +1,16 @@
 
+from http.client import BAD_REQUEST
 from pyrogram import Client, filters
 from pyrogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from numerize import numerize
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
 from pyromod import listen
+from pyrogram.errors import bad_request_400
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
 from base64 import urlsafe_b64decode, urlsafe_b64encode
-import os
+import os , re
 import requests
 from moviepy.editor import *
 from db import getallusers, getusers, add_user
@@ -42,12 +44,16 @@ def unlock(encoded):
        #     bot.send_message(ids,"Thanks for using @ytaudiosaverbot dont forget to share me")
 @bot.on_message(filters.private  & filters.user(383694032) & filters.command("broadcast"))
 async def send(cls,msg):
-    brd = await bot.ask(msg.from_user.id,"What do you want to send")
-    for i in getallusers():
-        order , ids = i
-        if ids != None:
+    try:
 
-            await bot.send_message(ids,brd.text)
+        brd = await bot.ask(msg.from_user.id,"What do you want to send")
+        for i in getallusers():
+            order , ids = i
+            if ids != None:
+
+                await bot.send_message(ids,brd.text)
+    except bad_request_400.UserIsBlocked:
+        pass
 
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
@@ -89,16 +95,31 @@ async def reply(cls, msg):
         await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ", reply_markup=ReplyKeyboardRemove())
     else:
         await bot.send_message(msg.from_user.id, "report cancelled", reply_markup=ReplyKeyboardRemove())
-@bot.on_message(filters.command("totalusers"))
+@bot.on_message(filters.command("totalusers") & filters.user(383694032))
 async def reply(cls,msg):
-    await bot.send_message(msg.from_user.id,len(getallusers()))
-    users = ""
+    await bot.send_message(msg.from_user.id,len(getallusers()),reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton("Get all users",callback_data="get-users")]
+    ]))
+   # users = ""
+    #for i in getallusers():
+      #  order , user_ids = i
+      #  get_usr = await bot.get_users(user_ids)
+      #  users = users + f"{get_usr.first_name} \n" 
+ #   await bot.send_message(msg.from_user.id,users)
+@bot.on_callback_query(filters.regex("get-users"))
+async def reply(cls,msg):
+    usr = []
     for i in getallusers():
         order , user_ids = i
         get_usr = await bot.get_users(user_ids)
-        users = users + f"{get_usr.first_name} \n" 
-    await bot.send_message(msg.from_user.id,users)
-
+        #print(type(get_usr))
+        usr.append(get_usr.first_name)
+    with open("name.txt","a" , encoding="utf-8") as log:
+        for i in usr:
+            log.write(i+"\n")
+        log.close()
+    await bot.send_document(383694032,"name.txt")
+    os.remove("name.txt")
 @bot.on_message(filters.private & filters.command("search"))
 async def search(cls, msg):
     global next_res,res
@@ -215,8 +236,51 @@ async def reply(query,msg):
 @bot.on_callback_query(filters.regex("how-to"))
 async def reply(query,msg):
     await msg.answer("click on the video link you want to download its that simple",show_alert=True)
+'''
+@bot.on_message(filters.text)
+async def txt(cls,msg):
+    global next_rese,rese
+    x = msg.text
+    y  = "\A[a-z]{5}:// "
+    if re.findall(y,x):
+        print(msg.text)
+        print("yes")
+    else :
+        print("no")
+        
+        #x = await bot.ask(msg.from_user.id, "**send me the name of the video and press the link that comes with it**")
+        vd = Search(msg.text)
+        rese = ""
+        next_rese = ""
+        count = 0
+        for i in vd.results:
+            count = count + 1
+            if count <= 3:
+
+                rese = rese + \
+                    f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+            elif count >=3 and count <= 6: 
+                next_rese = next_rese +f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
 
 
+        await bot.send_message(msg.from_user.id, rese,reply_markup=InlineKeyboardMarkup(
+                [
+                    [  # First row
+                        InlineKeyboardButton(  # Generates a callback query when pressed
+                            "next page",
+                            callback_data="next-page"
+                        ),
+                        InlineKeyboardButton(  # Generates a callback query when pressed
+                            "How to download❔",
+                            callback_data="how-to"
+                        )
+                        
+                    ]
+                ]
+            ))
+
+'''
+        
     
 @bot.on_message(filters.command("download"))
 async def answer(cls, msg):
