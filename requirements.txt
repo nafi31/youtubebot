@@ -1,7 +1,7 @@
 pyrogram
 Tgcrypto
 pyromod
-pytube
+git+https://github.com/oleksandr-shvab/pytube#egg=pytube
 moviepy
 psycopg[binary]
 numerize

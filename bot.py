@@ -100,12 +100,12 @@ async def reply(cls,msg):
     await bot.send_message(msg.from_user.id,len(getallusers()),reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Get all users",callback_data="get-users")]
     ]))
-   # users = ""
+  ''' # users = ""
     #for i in getallusers():
       #  order , user_ids = i
       #  get_usr = await bot.get_users(user_ids)
       #  users = users + f"{get_usr.first_name} \n" 
- #   await bot.send_message(msg.from_user.id,users)
+ #   await bot.send_message(msg.from_user.id,users) '''
 @bot.on_callback_query(filters.regex("get-users"))
 async def reply(cls,msg):
     usr = []
