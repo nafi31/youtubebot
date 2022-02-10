@@ -6,7 +6,7 @@ from numerize import numerize
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
 from pyromod import listen
-from pyrogram.errors import bad_request_400
+from pyrogram.errors import bad_request_400 , FloodWait
 from pytube import YouTube, Search
 from pytube.exceptions import RegexMatchError
 from base64 import urlsafe_b64decode, urlsafe_b64encode
@@ -42,7 +42,7 @@ def unlock(encoded):
       #  if ids != None:
 
        #     bot.send_message(ids,"Thanks for using @ytaudiosaverbot dont forget to share me")
-@bot.on_message(filters.private  & filters.user(383694032) & filters.command("broadcast"))
+'''@bot.on_message(filters.private  & filters.user(383694032) & filters.command("broadcast"))
 async def send(cls,msg):
     try:
 
@@ -52,9 +52,12 @@ async def send(cls,msg):
             if ids != None:
 
                 await bot.send_message(ids,brd.text)
-    except bad_request_400.UserIsBlocked:
-        pass
-
+    except (bad_request_400.UserIsBlocked , FloodWait )as e:
+        if e == FloodWait:
+            await asyncio.sleep(e.x)
+        else:    
+            pass
+'''
 @bot.on_message(filters.private & filters.command("start"))
 async def answer(bot, message):
     #print(getusers(message.from_user.id))
@@ -100,7 +103,7 @@ async def reply(cls,msg):
     await bot.send_message(msg.from_user.id,len(getallusers()),reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Get all users",callback_data="get-users")]
     ]))
-  ''' # users = ""
+''' # users = ""
     #for i in getallusers():
       #  order , user_ids = i
       #  get_usr = await bot.get_users(user_ids)
