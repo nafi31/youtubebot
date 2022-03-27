@@ -141,7 +141,7 @@ async def reply(cls, msg):
 async def hmm(cls, msg):
     global next_res, res
     x = msg.text
-    if not x == "/howto" and not x == "/help" and not x == "/start":
+    if not x == "/howto" and not x == "/help" and not x == "/start" and not "https://" in x:
 
         vd = Search(x)
         res = ""
@@ -172,6 +172,40 @@ async def hmm(cls, msg):
                 ]
             ]
         ))
+    elif "https://" in x:
+        x = msg.text
+
+        try:
+            thmb = YouTube(x)
+            re = requests.get(thmb.thumbnail_url)
+            with open(thmb.title+".jpg", "wb") as img:
+                img.write(re.content)
+                img.close()
+            try:
+                vd = YouTube(x)
+                # opens the link if its valid
+                video = vd.streams.filter(
+                    progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+            # filtering the highest quality of the video available
+                await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
+
+                vid = VideoFileClip(video.download())
+            # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
+
+                mp3 = vd.title+".mp3"
+            # sets the audio file name as the youtube videos title
+                file = vid.audio.write_audiofile(mp3)
+            # writting the mp3 file
+
+                vid.close()
+                await bot.send_chat_action(msg.from_user.id, "upload_audio")
+                await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
+                                     caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
+            except RegexMatchError:
+                # checks if the given user input is valid if not returns the ff message
+                await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
+        except RegexMatchError:
+            pass
 
 
 @bot.on_message(filters.private & filters.command("search"))
@@ -297,9 +331,10 @@ async def reply(query, msg):
     await msg.answer("click on the video link you want to download its that simple", show_alert=True)
 
 
-@bot.on_message(filters.regex("http.*"))
+@bot.on_message(filters.regex("https://.*"))
 async def answer(cls, msg):
     x = msg.text
+    print(x)
     try:
         thmb = YouTube(x)
         re = requests.get(thmb.thumbnail_url)
