@@ -9,7 +9,7 @@ def create_table():
     cur.execute('''
     CREATE TABLE  userdata(
     id serial PRIMARY KEY,
-    user_id integer)
+    user_id bigint)
     ''')
     conn.commit()
     conn.close()
@@ -55,4 +55,6 @@ def add_user(user_ids):
 
     else:
         conn.close()
+
         #print("no si")
+create_table()

@@ -79,7 +79,7 @@ async def answer(bot, message):
 
 @bot.on_message(filters.private & filters.command("commands"))
 async def reply(cls, msg):
-    await msg.reply("Use \n to download a video just send me a youtube link or enter the video or artists name \n/help to report bugs")
+    await msg.reply("\n to download a video just send me a youtube link or enter the video or artists name \n/help to report bugs")
 
 
 # @bot.on_message(filters.user("@nafiyad1"))
@@ -126,7 +126,7 @@ async def reply(cls, msg):
         order, user_ids = i
         get_usr = await bot.get_users(user_ids)
         # print(type(get_usr))
-        if not get_usr.firstname in usr:
+        if not get_usr.first_name in usr:
             usr.append(get_usr.first_name)
     with open("name.txt", "a") as log:
         for x in usr:
