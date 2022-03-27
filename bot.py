@@ -297,7 +297,7 @@ async def reply(query, msg):
     await msg.answer("click on the video link you want to download its that simple", show_alert=True)
 
 
-@bot.on_message(filters.command("download"))
+@bot.on_message(filters.command("download") & filters.regex("http.*"))
 async def answer(cls, msg):
     x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
     # asks user for input
