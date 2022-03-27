@@ -7,7 +7,7 @@ def create_table():
 
     cur = conn.cursor()
     cur.execute('''
-    CREATE TABLE  userdata(
+    CREATE TABLE  userdata2(
     id serial PRIMARY KEY,
     user_id bigint)
     ''')
@@ -21,7 +21,7 @@ def getallusers():
         "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
 
     cur = conn.cursor()
-    cur.execute("SELECT * FROM userdata")
+    cur.execute("SELECT * FROM userdata2")
     conn.commit()
     res = cur.fetchall()
 
@@ -34,7 +34,7 @@ def getusers(user_ids):
         "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
 
     cur = conn.cursor()
-    cur.execute("select * from userdata where user_id = %s", (user_ids,))
+    cur.execute("select * from userdata2 where user_id = %s", (user_ids,))
     conn.commit()
     res = cur.fetchall()
 
@@ -49,7 +49,7 @@ def add_user(user_ids):
     cur = conn.cursor()
     if not getusers(user_ids):
 
-        cur.execute("INSERT INTO userdata (user_id) values(%s)", (user_ids,))
+        cur.execute("INSERT INTO userdata2 (user_id) values(%s)", (user_ids,))
         conn.commit()
         conn.close()
 
@@ -57,4 +57,3 @@ def add_user(user_ids):
         conn.close()
 
         #print("no si")
-create_table()
