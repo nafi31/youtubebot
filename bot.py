@@ -312,6 +312,7 @@ async def answer(cls, msg):
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
          # filtering the highest quality of the video available
+            await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
             vid = VideoFileClip(video.download())
         # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
