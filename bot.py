@@ -99,7 +99,7 @@ async def reply(cls, msg):
         # print("y")
         await issue.forward(383694032)
         # print("z")
-        await bot.send_message(383694032, f"username @{msg.from_user.username} \n id {msg.from_user.id} \n bug issue: {issue.text}")
+        await bot.send_message(383694032, f"username @{msg.from_user.username if msg.from_user.username else None} \n id {msg.from_user.id} \n bug issue: {issue.text}")
 
         await bot.send_message(msg.from_user.id, "Your response was sent , thanks for reporting ", reply_markup=ReplyKeyboardRemove())
     else:
@@ -135,6 +135,41 @@ async def reply(cls, msg):
         log.close()
     await bot.send_document(383694032, "name.txt")
     os.remove("name.txt")
+
+
+@bot.on_message(filters.private & filters.text & ~filters.regex('/yt_.*'))
+async def hmm(cls, msg):
+    global next_res, res
+    x = msg.text
+    vd = Search(x)
+    res = ""
+    next_res = ""
+    count = 0
+    for i in vd.results:
+        count = count + 1
+        if count <= 3:
+
+            res = res + \
+                f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+        elif count >= 3 and count <= 6:
+            next_res = next_res + \
+                f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+
+    await bot.send_message(msg.from_user.id, res, reply_markup=InlineKeyboardMarkup(
+        [
+            [  # First row
+                InlineKeyboardButton(  # Generates a callback query when pressed
+                    "next page",
+                    callback_data="next-page"
+                ),
+                InlineKeyboardButton(  # Generates a callback query when pressed
+                    "How to download❔",
+                    callback_data="how-to"
+                )
+
+            ]
+        ]
+    ))
 
 
 @bot.on_message(filters.private & filters.command("search"))
@@ -189,14 +224,14 @@ async def reply(bot, msg):
         else:
             pass
 
-        await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
-
         try:
+
             vd = YouTube("https://youtu.be/"+unlock(msg.text.split("_")[1]))
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
             # filtering the highest quality of the video available
+            await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to save the bot")
 
             vid = VideoFileClip(video.download())
             # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
@@ -258,50 +293,6 @@ async def reply(query, msg):
 @bot.on_callback_query(filters.regex("how-to"))
 async def reply(query, msg):
     await msg.answer("click on the video link you want to download its that simple", show_alert=True)
-'''
-@bot.on_message(filters.text)
-async def txt(cls,msg):
-    global next_rese,rese
-    x = msg.text
-    y  = "\A[a-z]{5}:// "
-    if re.findall(y,x):
-        print(msg.text)
-        print("yes")
-    else :
-        print("no")
-        
-        #x = await bot.ask(msg.from_user.id, "**send me the name of the video and press the link that comes with it**")
-        vd = Search(msg.text)
-        rese = ""
-        next_rese = ""
-        count = 0
-        for i in vd.results:
-            count = count + 1
-            if count <= 3:
-
-                rese = rese + \
-                    f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
-            elif count >=3 and count <= 6: 
-                next_rese = next_rese +f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
-
-
-        await bot.send_message(msg.from_user.id, rese,reply_markup=InlineKeyboardMarkup(
-                [
-                    [  # First row
-                        InlineKeyboardButton(  # Generates a callback query when pressed
-                            "next page",
-                            callback_data="next-page"
-                        ),
-                        InlineKeyboardButton(  # Generates a callback query when pressed
-                            "How to download❔",
-                            callback_data="how-to"
-                        )
-                        
-                    ]
-                ]
-            ))
-
-'''
 
 
 @bot.on_message(filters.command("download"))
