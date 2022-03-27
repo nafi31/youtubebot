@@ -297,13 +297,11 @@ async def reply(query, msg):
     await msg.answer("click on the video link you want to download its that simple", show_alert=True)
 
 
-@bot.on_message(filters.command("download") & filters.regex("http.*"))
+@bot.on_message(filters.regex("http.*"))
 async def answer(cls, msg):
-    x = await bot.ask(msg.from_user.id, "**send me the link of the youtube video **")
-    # asks user for input
-    await bot.send_message(msg.from_user.id, "downloading the video please wait, might take 1-2 mins because of shortage of server funds, dm  @nafiyad1 to save the bot")
+    x = msg.text
     try:
-        thmb = YouTube(x.text)
+        thmb = YouTube(x)
         re = requests.get(thmb.thumbnail_url)
         with open(thmb.title+".jpg", "wb") as img:
             img.write(re.content)
