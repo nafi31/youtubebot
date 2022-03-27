@@ -141,35 +141,37 @@ async def reply(cls, msg):
 async def hmm(cls, msg):
     global next_res, res
     x = msg.text
-    vd = Search(x)
-    res = ""
-    next_res = ""
-    count = 0
-    for i in vd.results:
-        count = count + 1
-        if count <= 3:
+    if not x == "/howto" and not x == "/help" and not x == "/start":
 
-            res = res + \
-                f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
-        elif count >= 3 and count <= 6:
-            next_res = next_res + \
-                f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+        vd = Search(x)
+        res = ""
+        next_res = ""
+        count = 0
+        for i in vd.results:
+            count = count + 1
+            if count <= 3:
 
-    await bot.send_message(msg.from_user.id, res, reply_markup=InlineKeyboardMarkup(
-        [
-            [  # First row
-                InlineKeyboardButton(  # Generates a callback query when pressed
-                    "next page",
-                    callback_data="next-page"
-                ),
-                InlineKeyboardButton(  # Generates a callback query when pressed
-                    "How to download❔",
-                    callback_data="how-to"
-                )
+                res = res + \
+                    f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
+            elif count >= 3 and count <= 6:
+                next_res = next_res + \
+                    f"{i.title} 👁{numerize.numerize(i.views)} \n\n/yt_{lock(i.video_id)} \n\n "
 
+        await bot.send_message(msg.from_user.id, res, reply_markup=InlineKeyboardMarkup(
+            [
+                [  # First row
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "next page",
+                        callback_data="next-page"
+                    ),
+                    InlineKeyboardButton(  # Generates a callback query when pressed
+                        "How to download❔",
+                        callback_data="how-to"
+                    )
+
+                ]
             ]
-        ]
-    ))
+        ))
 
 
 @bot.on_message(filters.private & filters.command("search"))
