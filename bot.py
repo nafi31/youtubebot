@@ -198,7 +198,7 @@ async def hmm(cls, msg):
             # writting the mp3 file
 
                 vid.close()
-                await bot.send_chat_action(msg.from_user.id, "upload_audio")
+
                 await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                                      caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
             except RegexMatchError:
@@ -278,7 +278,7 @@ async def reply(bot, msg):
             # writting the mp3 file
 
             vid.close()
-            await bot.send_chat_action(msg.from_user.id, "upload_audio")
+
             await bot.send_audio(msg.from_user.id, audio=mp3, title=name,
                                  caption=str(name)+"\n via @ytaudiosaverbot", thumb=name+".jpg", duration=int(vd.length), performer=vd.author)
         except RegexMatchError:
