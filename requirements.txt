@@ -1,7 +1,7 @@
 pyrogram
 Tgcrypto
 pyromod
-https://github.com/nafi31/pytube.git
+git+https://github.com/nafi31/pytube.git
 moviepy
 psycopg[binary]
 numerize
