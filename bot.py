@@ -129,7 +129,7 @@ async def reply(cls, msg):
             usr.append(get_usr.first_name)
     with open("name.txt", "a") as log:
         for x in usr:
-            if x != "":
+            if x != "" and x != None:
                 log.write(x+"\n")
         log.close()
     await bot.send_document(383694032, "name.txt")
