@@ -54,7 +54,6 @@ async def send(cls, msg):
         for i in getallusers():
             order, ids = i
             if ids != None:
-
                 await bot.send_message(ids, brd.text)
     except FloodWait as e:
 
@@ -281,9 +280,10 @@ async def reply(bot, msg):
 
             await bot.send_audio(msg.from_user.id, audio=mp3, title=name,
                                  caption=str(name)+"\n via @ytaudiosaverbot", thumb=name+".jpg", duration=int(vd.length), performer=vd.author)
-        except RegexMatchError:
+        except Exception as e:
             # checks if the given user input is valid if not returns the ff message
-            await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
+            await bot.send_message(msg.from_user.id, '**Link not valid** please try again')
+            print(e)
     except RegexMatchError:
         pass
 
@@ -342,7 +342,7 @@ async def answer(cls, msg):
             img.write(re.content)
             img.close()
         try:
-            vd = YouTube(x.text)
+            vd = YouTube(x)
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
@@ -363,9 +363,9 @@ async def answer(cls, msg):
                                  caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
         except RegexMatchError:
             # checks if the given user input is valid if not returns the ff message
-            pass
+            await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
     except RegexMatchError:
-        await bot.send_message(msg.from_user.id, '**Link not valid** \n please try again')
+        pass
 
 
 bot.run()
