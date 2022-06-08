@@ -265,7 +265,7 @@ async def reply(bot, msg):
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-            if video.filesize/1000000 <= 20:
+            if video.filesize/1000000 <= 100:
 
                 # filtering the highest quality of the video available
                 await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to donate and save the bot")
@@ -283,7 +283,7 @@ async def reply(bot, msg):
                 await bot.send_audio(msg.from_user.id, audio=mp3, title=name,
                                      caption=str(name)+"\n via @ytaudiosaverbot", thumb=name+".jpg", duration=int(vd.length), performer=vd.author)
             else:
-                await bot.send_message(msg.from_user.id, "The file size is greater than 20 Mb dm @nafiyad1 to download files greater than 20 Mb")
+                await bot.send_message(msg.from_user.id, "File is to big")
         except Exception as e:
             # checks if the given user input is valid if not returns the ff message
             await bot.send_message(msg.from_user.id, '**Link not valid** please try again')
@@ -350,7 +350,7 @@ async def answer(cls, msg):
             # opens the link if its valid
             video = vd.streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-            if video.filesize/1000000 <= 20:
+            if video.filesize/1000000 <= 100:
              # filtering the highest quality of the video available
                 await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to donate and save the bot")
 
@@ -367,7 +367,7 @@ async def answer(cls, msg):
                 await bot.send_audio(msg.from_user.id, audio=mp3, title=vd.title,
                                      caption=str(vd.title)+"\n via @ytaudiosaverbot", thumb=vd.title+".jpg", duration=int(vd.length), performer=vd.author)
             else:
-                await bot.send_message(msg.from_user.id, "The file size is greater than 20 Mb dm @nafiyad1 to download files greater than 20 Mb")
+                await bot.send_message(msg.from_user.id, "File is to big")
 
         except RegexMatchError:
             # checks if the given user input is valid if not returns the ff message
