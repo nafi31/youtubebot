@@ -94,7 +94,7 @@ async def reply(cls, msg):
         ["cancel"],
 
     ], resize_keyboard=True))
-    if issue.text != "cancel" and issue.text != "/start" and issue.text != "/help" and issue.text != "/download" and issue.text != "/search":
+    if issue.text != "cancel" and issue.text != "/start" and issue.text != "/help" and issue.text != "/download" and issue.text != "/search" and "http" not in issue.text:
         # print("y")
         await issue.forward(383694032)
         # print("z")
