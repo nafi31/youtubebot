@@ -268,7 +268,7 @@ async def reply(bot, msg):
             if video.filesize/1000000 <= 100:
 
                 # filtering the highest quality of the video available
-                await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to donate and save the bot")
+                await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds")
 
                 vid = VideoFileClip(video.download())
                 # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
@@ -352,7 +352,7 @@ async def answer(cls, msg):
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
             if video.filesize/1000000 <= 100:
              # filtering the highest quality of the video available
-                await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds , dm  @nafiyad1 to donate and save the bot")
+                await bot.send_message(msg.from_user.id, "downloading the video please wait , might take 1-2 mins because of shortage of server funds")
 
                 vid = VideoFileClip(video.download())
             # setting up the video file to be converted to mp3 in this case the youtube video the user provided with a link
