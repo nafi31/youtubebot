@@ -18,9 +18,9 @@ from moviepy.editor import *
 from db import getallusers, getusers, add_user
 
 bot = Client("start ",
-             bot_token="5022200001:AAEevxtnDk_qOAATQyfkF3hsTk0OcRi4iag",
-             api_hash="ce82c02582127129de5bf0ff2580352e",
-             api_id="1589810")
+             bot_token=f"{os.enviro.get("BOT_T")}",
+             api_hash=f"{os.enviro.get("API_HASH")}",
+             api_id=f"{os.enviro.get("API_ID")}"
 
 
 def lock(name):
