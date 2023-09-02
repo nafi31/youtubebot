@@ -20,7 +20,7 @@ from db import getallusers, getusers, add_user
 bot = Client("start1 ",
              bot_token=str(os.environ.get("BOT_T")),
              api_hash=str(os.environ.get("API_HASH")),
-             api_id=str(os.environ.get("API_ID")))
+             api_id=str(os.environ.get("API_id")))
 
 
 def lock(name):
