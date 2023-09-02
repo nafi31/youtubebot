@@ -17,10 +17,10 @@ import requests
 from moviepy.editor import *
 from db import getallusers, getusers, add_user
 
-bot = Client("start ",
-             bot_token=f"{os.environ.get("BOT_T")}",
-             api_hash=f"{os.environ.get("API_HASH")}",
-             api_id=f"{os.environ.get("API_ID")}"
+bot = Client("start1 ",
+             bot_token=str(os.environ.get("BOT_T")),
+             api_hash=str(os.environ.get("API_HASH")),
+             api_id=str(os.environ.get("API_ID"))"
 
 
 def lock(name):
