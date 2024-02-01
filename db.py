@@ -3,7 +3,7 @@ import psycopg
 
 def create_table():
     conn = psycopg.connect(
-        "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
+        CREDENTIALS GO HERE)
 
     cur = conn.cursor()
     cur.execute('''
@@ -17,8 +17,7 @@ def create_table():
 
 
 def getallusers():
-    conn = psycopg.connect(
-        "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
+    conn = psycopg.connect(CREDENTIALS GO HERE)
 
     cur = conn.cursor()
     cur.execute("SELECT * FROM userdata2")
@@ -31,7 +30,7 @@ def getallusers():
 
 def getusers(user_ids):
     conn = psycopg.connect(
-        "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
+        CREDENTIALS GO HERE)
 
     cur = conn.cursor()
     cur.execute("select * from userdata2 where user_id = %s", (user_ids,))
@@ -44,7 +43,7 @@ def getusers(user_ids):
 
 def add_user(user_ids):
     conn = psycopg.connect(
-        "host=abul.db.elephantsql.com  dbname=ovooekmc  user=ovooekmc password=Q0JeWjZOXDqQ1JHsvl3xfjIkZcgRWNpl ")
+        CREDENTIALS GO HERE)
 
     cur = conn.cursor()
     if not getusers(user_ids):
